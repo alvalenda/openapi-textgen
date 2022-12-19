@@ -12,9 +12,9 @@ async function generate() {
   const response = await openai.createCompletion({
     model: "text-davinci-003",
     prompt:
-      "Topic: História de um Personagem\nHistória em três setenças: Um ladino especializado em enfrentar usuários de magia que viveu até sua vida adulta sob lavagem cerebral de um culto religoso de Shar até ser liberto por sacerdotisas de Selune.",
+      "Tópico: História do vilão Deus Palha\n Deus Palha é um espírito da floresta que foi corrompido por ravenloft. Atualmente faz os habitantes do vilareijo Vale Dourado como raféns da sua vontade.\n Descrever detalhes.",
     temperature: 0.8,
-    max_tokens: 60,
+    max_tokens: 3200,
     top_p: 1.0,
     frequency_penalty: 0.5,
     presence_penalty: 0.0,
@@ -31,10 +31,22 @@ async function generate() {
 
 // função salva valor de variável em arquivo de text
 function saveToTextFile(dataText) {
-  fs.writeFileSync("./public/texto.txt", dataText, (err) => {
+  dataText = dataText.trim();
+  fs.writeFileSync(`./public/texto-${Date.now()}.txt`, dataText, (err) => {
     if (err) return console.log(err);
     console.log("Texto > ./public/texto.txt");
   });
 }
 
 generate();
+
+/*
+Lista de models disponíveis:
+text-davinci-003
+text-davinci-002
+text-davinci-001
+text-davinci-001
+text-curie-001
+text-babbage-001
+text-ada-001
+*/
