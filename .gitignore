@@ -31,3 +31,7 @@ yarn-error.log*
 .env.production.local
 
 public/*.txt
+assets/*.*
+dist/
+out/*.txt
+test/
