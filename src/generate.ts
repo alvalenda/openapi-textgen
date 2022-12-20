@@ -1,14 +1,10 @@
 import { Configuration, OpenAIApi } from "openai";
 import { initialText, instructions } from "./utils/generate-text.util";
+import { fileSetup } from "./utils/file-setup.util";
 import * as dotenv from "dotenv";
 import fs from "fs";
 
 dotenv.config();
-
-const fileSetup = {
-  dir: "./out/",
-  fileName: `texto-${Date.now()}.txt`,
-};
 
 const configuration: Configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
