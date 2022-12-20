@@ -5,17 +5,22 @@ import fs from "fs";
 
 dotenv.config();
 
-const configuration = new Configuration({
+const fileSetup = {
+  dir: "./out/",
+  fileName: `texto-${Date.now()}.txt`,
+};
+
+const configuration: Configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
+const openai: OpenAIApi = new OpenAIApi(configuration);
 
-async function generate() {
+async function generate(): Promise<void> {
   const response = await openai.createCompletion({
-    model: "text-davinci-002",
+    model: "text-davinci-003",
     prompt: instructions + initialText,
     temperature: 0.8,
-    max_tokens: 3200,
+    max_tokens: 3500,
     top_p: 0.8,
     frequency_penalty: 0,
     presence_penalty: 0,
@@ -23,7 +28,7 @@ async function generate() {
   });
 
   const data = response.data;
-  const texto =
+  const texto: string =
     initialText + data.choices.reduce((acc, choice) => acc + choice.text, "");
 
   console.log(data.choices);
@@ -31,11 +36,11 @@ async function generate() {
 }
 
 // função salva valor de variável em arquivo de text
-function saveToTextFile(dataText: string) {
+function saveToTextFile(dataText: string): void {
   dataText = dataText.trim();
   try {
-    fs.writeFileSync(`./out/texto-${Date.now()}.txt`, dataText);
-    console.log("Texto > ./out/texto.txt");
+    fs.writeFileSync(fileSetup.dir + fileSetup.fileName, dataText);
+    console.log(`Texto > ${fileSetup.dir + fileSetup.fileName}`);
   } catch (err) {
     console.error(err);
   }
