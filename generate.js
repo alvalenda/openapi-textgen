@@ -1,4 +1,5 @@
 const { Configuration, OpenAIApi } = require("openai");
+const { initialText } = require("./initial-text");
 
 const fs = require("fs");
 require("dotenv").config();
@@ -10,22 +11,23 @@ const openai = new OpenAIApi(configuration);
 
 async function generate() {
   const response = await openai.createCompletion({
-    model: "text-davinci-003",
+    model: "text-davinci-002",
     prompt:
-      "Tópico: História do vilão Deus Palha\n Deus Palha é um espírito da floresta que foi corrompido por ravenloft. Atualmente faz os habitantes do vilareijo Vale Dourado como raféns da sua vontade.\n Descrever detalhes.",
+      "Tópico: Traduzir do inglês para o português do Brasil. Substituir Heather por Hérica e Shadowbrooke por RioNegro\n" +
+      initialText,
     temperature: 0.8,
     max_tokens: 3200,
-    top_p: 1.0,
-    frequency_penalty: 0.5,
-    presence_penalty: 0.0,
+    top_p: 0.8,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    n: 1,
   });
 
   const data = response.data;
-  const texto = data.choices.reduce(
-    (acc, choice) => acc + " " + choice.text,
-    ""
-  );
+  const texto =
+    initialText + data.choices.reduce((acc, choice) => acc + choice.text, "");
 
+  console.log(data.choices);
   saveToTextFile(texto);
 }
 
@@ -40,13 +42,13 @@ function saveToTextFile(dataText) {
 
 generate();
 
-/*
-Lista de models disponíveis:
-text-davinci-003
-text-davinci-002
-text-davinci-001
-text-davinci-001
-text-curie-001
-text-babbage-001
-text-ada-001
-*/
+/*  **********************************************************************************
+                                    Lista de models disponíveis:
+                                    text-davinci-003
+                                    text-davinci-002
+                                    text-davinci-001
+                                    text-davinci-001
+                                    text-curie-001
+                                    text-babbage-001
+                                    text-ada-001
+    **********************************************************************************  */
