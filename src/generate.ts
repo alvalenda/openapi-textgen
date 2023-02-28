@@ -1,20 +1,22 @@
-import { Configuration, OpenAIApi } from "openai";
-import { initialText, instructions } from "./utils/generate-text.util";
-import { fileSetup } from "./utils/file-setup.util";
 import * as dotenv from "dotenv";
-import fs from "fs";
+import * as fs from "fs";
+import { Configuration, OpenAIApi } from "openai";
+import { CreateDataResponse } from "types/CreateDataResponse";
+import { fileSetup } from "./utils/file-setup.util";
+import { instructions, patientText } from "./utils/generate-text.util";
 
 dotenv.config();
 
 const configuration: Configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai: OpenAIApi = new OpenAIApi(configuration);
+
+const openAi: OpenAIApi = new OpenAIApi(configuration);
 
 async function generate(): Promise<void> {
-  const response = await openai.createCompletion({
+  const response = await openAi.createCompletion({
     model: "text-davinci-003",
-    prompt: instructions + initialText,
+    prompt: instructions + patientText,
     temperature: 0.8,
     max_tokens: 3500,
     top_p: 0.8,
@@ -23,11 +25,20 @@ async function generate(): Promise<void> {
     n: 1,
   });
 
-  const data = response.data;
-  const texto: string =
-    initialText + data.choices.reduce((acc, choice) => acc + choice.text, "");
+  const data: CreateDataResponse = response.data;
 
-  console.log(data.choices);
+  data.patientText = patientText;
+  console.log("data", data);
+
+  const texto: string = JSON.stringify(
+    {
+      patientText,
+      data: data.choices.reduce((acc, choice) => acc + choice.text, ""),
+    },
+    null,
+    2
+  );
+
   saveToTextFile(texto);
 }
 
@@ -37,12 +48,12 @@ function saveToTextFile(dataText: string): void {
   try {
     fs.writeFileSync(fileSetup.dir + fileSetup.fileName, dataText);
     console.log(`Texto > ${fileSetup.dir + fileSetup.fileName}`);
-  } catch (err) {
-    console.error(err);
+  } catch (err: any) {
+    err.message = "Erro ao salvar arquivo de texto.";
   }
 }
 
-generate();
+generate().catch((err) => console.error(err.message));
 
 /*  **********************************************************************************
                                     Lista de models disponíveis:
