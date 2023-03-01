@@ -28,13 +28,9 @@ async function generate(): Promise<void> {
   const data: CreateDataResponse = response.data;
 
   data.patientText = patientText;
-  // console.log("data", data);
 
   const texto: string = JSON.stringify(
-    // {
-    // patientText,
     data.choices.reduce((acc, choice) => acc + choice.text, ""),
-    // },
     null,
     2
   );

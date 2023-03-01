@@ -4,7 +4,7 @@ export const instructions: string =
 
 // This file is used to set the initial text of the editor.
 export const patientText: string =
-  "Tão distante! Meu coração dói. Se ao menos houvesse algum meio de sussurrar todo o meu amor para você agora, para que você pudesse ouvir exatamente como escrevo...";
+  "Te amo e não tem jeito, você me alucina. Te amo meu amor menina.";
 
 /* 
 frustrated, angry, tense, excited, delighted, happy, content, relaxed, calm, tired, bored, depressed
