@@ -11,6 +11,7 @@ const configuration: Configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+console.log(configuration);
 const openAi: OpenAIApi = new OpenAIApi(configuration);
 
 async function generate(): Promise<void> {
